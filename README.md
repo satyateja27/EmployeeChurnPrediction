@@ -1,8 +1,8 @@
 # EmployeeChurnPrediction
 
-##CMPE 239 Group Project
+CMPE 239 Group Project
 
-###Team Details
+Team Details
 
 1. George Zachariah
 2. Priya Jolly
