@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/HRPrediction.iml" filepath="$PROJECT_DIR$/.idea/HRPrediction.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/Spark_HRAnalytics.iml" filepath="$PROJECT_DIR$/.idea/Spark_HRAnalytics.iml" />
+>>>>>>> 009ebdb51265ae002af3b6c9536091703e870bda
     </modules>
   </component>
 </project>
