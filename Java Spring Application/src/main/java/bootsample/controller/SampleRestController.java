@@ -22,8 +22,6 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import com.fasterxml.jackson.databind.util.JSONWrappedObject;
 
 import bootsample.model.User;
-import bootsample.service.AddressService;
-import bootsample.service.PhoneService;
 import bootsample.service.UserService;
 
 @RestController
@@ -31,12 +29,6 @@ public class SampleRestController {
 	
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-	private PhoneService phoneService;
-	
-	@Autowired
-	private AddressService addressService;
 
 	/*
 	 * Get User as HTML(Handles JSON also)

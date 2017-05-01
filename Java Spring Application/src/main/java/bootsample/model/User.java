@@ -31,13 +31,13 @@ public class User implements Serializable {
 	private String lastname;
 	@Column(name="title")
 	private String title;
-	@ManyToMany(targetEntity=Phone.class)
+//	@ManyToMany(targetEntity=Phone.class)
 	@JoinTable(name="phone_users", joinColumns={@JoinColumn(name="users_id", referencedColumnName="id")},
 	inverseJoinColumns={@JoinColumn(name="phone_phone_id", referencedColumnName="phone_id")})
 	private Set phones;
 	
 	@OneToOne
-	private Address address;
+//	private Address address;
 	
 	public int getId() {
 		return id;
@@ -50,13 +50,13 @@ public class User implements Serializable {
 	public User(){
 	}
 	
-	public User(String firstname, String lastname, String title,Address address) {
+/*	public User(String firstname, String lastname, String title,Address address) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.title = title;
 		this.address = address;
-	}
+	}*/
 
 
 	public String getFirstname() {
@@ -89,13 +89,6 @@ public class User implements Serializable {
 		this.phones = phones;
 	}
 
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
 
 	@Override
 	public String toString() {
