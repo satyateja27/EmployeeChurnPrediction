@@ -1,7 +1,6 @@
 # EmployeeChurnPrediction
 
 CMPE 239 Group Project
-
 Team Details
 
 1. George Zachariah
