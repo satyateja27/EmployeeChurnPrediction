@@ -161,6 +161,7 @@ def getDeptTrends():
 
     left_data = sep_hr_data[sep_hr_data.left == 1]
     total_count=sep_hr_data.dept.value_counts()
+    print (total_count)
 
     percent_left = (left_data.dept.value_counts() / sep_hr_data.dept.value_counts() * 100, 2)
     # print('Percentage of employees that left by department \n\n', percent_left.sort_values(ascending = False))
