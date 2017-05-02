@@ -16,8 +16,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 	  
 	  <style>
 		table {
@@ -40,7 +38,7 @@
 	  
 </head>
 <body>
-	<div ng-app="myApp" ng-controller="myCtrl" ng-init="stop=false; terminate=false">
+
 	<div class = "panel panel-default">
             <div class = "panel-body bg-primary" style=" height:65px">
                <nav class="navbar navbar-light">
@@ -74,21 +72,16 @@
          <div>
          	<div class="col-sm-1"></div>
          	<div class="col-sm-10">
-         		<h1>Admin Dashboard</h1><br/><br/>
-         		
-         		
+         		<div class="panel-body" style="text-align:center">
+				<h1>Profile</h1><br/><br/>
+				<h4><span class="glyphicon glyphicon-user"></span> First Name: ${user.getFirstName()}</h4>
+				<h4><span class="glyphicon glyphicon-user"></span> Last Name: ${user.getLastName()}</h4>
+				<h4><span class="glyphicon glyphicon-envelope"></span> Email: ${user.getEmail()}</h4>
+				<h4><span class="glyphicon glyphicon-map-marker"></span> Organization: ${user.getOrg()}</h4>
+			</div>
          	</div>
          	<div class="col-sm-1"></div>
          </div>
-	</div>
-	<script>
-		var app = angular.module('myApp',[]);
-		app.controller('myCtrl',function($scope, $http){
-			$scope.active = function(input){
-				console.log(input);
-				return false;
-			};
-		});
-	</script>
+	
 </body>
 </html>

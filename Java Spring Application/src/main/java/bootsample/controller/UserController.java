@@ -66,12 +66,20 @@ public class UserController {
 	}
 	
 	@GetMapping("/user/{userId}/dashBoard")		
-	public ModelAndView dashBoardLoading(@PathVariable(value="userId") int userId){
-		
+	public ModelAndView getDashBoard(@PathVariable(value="userId") int userId){
 		ModelMap model = new ModelMap();
 		User user = userService.findUserbyId(userId);
 		model.addAttribute("user", user);
 		return new ModelAndView("AdminDashboard",model);
+	}
+	
+	@GetMapping("/user/{userId}/profile")		
+	public ModelAndView getProfile(@PathVariable(value="userId") int userId){
+		
+		ModelMap model = new ModelMap();
+		User user = userService.findUserbyId(userId);
+		model.addAttribute("user", user);
+		return new ModelAndView("AdminProfile",model);
 	}
 	
 }
