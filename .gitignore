@@ -1,8 +1,8 @@
 *.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-.DS_Store
+*.DS_Store
+*.project
+*.classpath
+*.settings/
 
 # Package Files #
 *.jar
