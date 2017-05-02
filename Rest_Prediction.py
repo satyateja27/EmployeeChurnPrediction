@@ -8,11 +8,13 @@ import numpy as np
 import warnings
 warnings.filterwarnings("ignore")
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,Response
+from flask_cors import CORS, cross_origin
 import pandas as pd
 from sklearn.externals import joblib
 
 app = Flask(__name__)
+CORS(app)
 
 # inputs
 training_data = 'HR_comma_sep.csv'
@@ -137,7 +139,7 @@ def getPromotionStats():
     output = {}
     for key in promotion:
         output[key['sales']] = key['promotion_last_5years']
-    return json.dumps(output)
+    return Response(json.dumps(output),  mimetype='application/json')
 
 @app.route('/getProjectStats',methods=['GET'])
 def getProjectStats():
@@ -217,7 +219,7 @@ def getDeptTrends():
         count = result[i]
         count.append(int(str(total[i])))
         result[i] = count
-    return json.dumps(result)
+    return Response(json.dumps(result),  mimetype='application/json')
 
 @app.route('/predict', methods=['POST'])
 def predict():
