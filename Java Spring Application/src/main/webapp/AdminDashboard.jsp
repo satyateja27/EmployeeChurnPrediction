@@ -47,24 +47,21 @@
                   <div class="container-fluid">
                      <ul class="nav navbar-nav">
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUser_id()}/dashBoard" style="color:white">User Dashboard</a>
+                           <a class="nav-link" href="/user/${user.getUserId()}/dashBoard" style="color:white">Admin Dashboard</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUser_id()}/createInstance"style="color:white">Create Instances</a>
+                           <a class="nav-link" href="" style="color:white">Churn Prediction</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUser_id()}/monitorInstance" style="color:white">Monitor Instances</a>
+                           <a class="nav-link" href="" style="color:white">Churn Recommendation</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUser_id()}/userProfile" style="color:white">User Profile</a>
-                        </li>
-                        <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUser_id()}/userBilling" style="color:white">User Billing</a>
+                           <a class="nav-link" href="/user/${user.getUserId()}/userProfile" style="color:white">User Profile</a>
                         </li>
                      </ul>
                      <ul class="nav navbar-nav navbar-right">
                      	<li class="nav-item">
-                           <a class="nav-link" href="#" style="color:white">Hi, ${user.getFirst_name() }</a>
+                           <a class="nav-link" href="#" style="color:white">Hi, ${user.getFirstName() }</a>
                         </li>
                      	<li class="nav-item">
                            <a class="nav-link" href="/" style="color:white"><span class="glyphicon glyphicon-off"></span> Logout</a>
@@ -77,35 +74,8 @@
          <div>
          	<div class="col-sm-1"></div>
          	<div class="col-sm-10">
-         		<h1>User Dashboard</h1><br/><br/>
-         		<h3>Existing Instances</h3>
-         		<table>
-         			<tr>
-         				<th>Instance ID</th>
-         				<th>Instance Name</th>
-         				<th>AMI ID</th>
-         				<th>Number of Instances</th>
-         				<th>Instance Status</th>
-         				<th>Operation</th>
-         			</tr>
-         			
-         			<c:forEach items="${Instance}" var="instance">
-         			<tr>
-         			<form method="" action="">
-         				<td>${instance.getInstance_id()}</td>
-         				<td>${instance.getInstance_name()}</td>
-         				<td>${instance.getAmi_name()}</td>
-         				<td>${instance.getNum_instance()}</td>
-         				<td><label ng-show="${instance.getInstance_active()}" style="color:green"><b>Active</b></label>
-         				<label ng-show="${instance.getInstance_stopped()}" style="color:#f44242"><b>Stopped</b></label>
-         				<label ng-show="${instance.getInstance_terminated()}"><b>Terminated</b></label></td>
-         				<td><button ng-click="stopReq(${instance.getInstance_id()})">Stop</button>
-         				<button ng-click="terminateReq(${instance.getInstance_id()})">Terminate</button>
-         				<button ng-click="startReq(${instance.getInstance_id()})">Start</button></td>
-         			</form>
-         			</tr>
-         			</c:forEach>	
-         		</table>
+         		<h1>Admin Dashboard</h1><br/><br/>
+         		
          		
          	</div>
          	<div class="col-sm-1"></div>
@@ -123,7 +93,7 @@
 					params:{instanceId:instanceId},
 					header:{'Content-Type': 'application/json'}
 				}).success(function(data){
-					window.location.href="/user/${user.getUser_id()}/dashBoard";
+					window.location.href="/user/${user.getUserId()}/dashBoard";
 				});
 			};
 			$scope.terminateReq = function(instanceId){
@@ -134,7 +104,7 @@
 					params:{instanceId:instanceId},
 					header:{'Content-Type': 'application/json'}
 				}).success(function(data){
-					window.location.href="/user/${user.getUser_id()}/dashBoard";
+					window.location.href="/user/${user.getUserId()}/dashBoard";
 					
 				});
 			};
@@ -146,7 +116,7 @@
 					params:{instanceId:instanceId},
 					header:{'Content-Type': 'application/json'}
 				}).success(function(data){
-					window.location.href="/user/${user.getUser_id()}/dashBoard";
+					window.location.href="/user/${user.getUserId()}/dashBoard";
 					
 				});
 			};
