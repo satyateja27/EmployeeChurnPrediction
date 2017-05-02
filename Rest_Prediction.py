@@ -111,62 +111,32 @@ def getEmpByDept():
     return json.dumps(output)
 @app.route('/getDeptTrends', methods=['GET'])
 def getDeptTrends():
-    training_data = 'HR_comma_sep.csv'
-    hr_data = pd.read_csv(training_data)
+    #Libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import json
+    #Read CSV into Pandas
+    hr_data = pd.read_csv('HR_comma_sep.csv')
     hr_data['dept'] = hr_data['sales']
     hr_data.drop(['sales'], axis=1, inplace=True)
-    print(hr_data.head())
-
-    salary_dict = {'low': 30000, 'medium': 60000, 'high': 90000}
-    hr_data['salary_estimate'] = hr_data['salary'].map(salary_dict)
-
-    eval_mean = hr_data['last_evaluation'].mean()
-    eval_std = np.std(hr_data['last_evaluation'])
-
-    hr_data['performance(standard units)'] = (hr_data['last_evaluation'] - eval_mean) / eval_std
-
-    def performance_label(row):
-        peformance = row['performance(standard units)']
-        if peformance >= 1:
-            result = "Above average"
-        else:
-            result = "Below Average"
-        return (result)
-
-    hr_data['performance label'] = hr_data.apply(performance_label, axis=1)
-
-    left_dict = {1: 'left', 0: 'stayed'}
-    hr_data['left(as_string'] = (hr_data['left'].map(left_dict))
-
-    columns = (hr_data.columns)
-    num_columns = (hr_data._get_numeric_data().columns)
-
-    sep_hr_data = hr_data
-    # sep_hr_data['Performance cluster'] = sep_hr_data['left(as_string)'] + ' : ' + sep_hr_data['performance label']
-
-    # sep_hr_pivot = sep_hr_data.pivot_table(index= (['Performance cluster']), values =num_columns, aggfunc=np.mean)
-    # sep_hr_pivot.transpose()
-
-    # sep_hr_data[['Performance cluster', 'average_montly_hours']].boxplot(by = 'Performance cluster')
-    # sep_hr_data[['Performance cluster', 'number_project']].boxplot(by = 'Performance cluster')
-
-    # columns = ['left','average_montly_hours', 'number_project','time_spend_company']
-
-    aa_sep_hr_data = sep_hr_data[(sep_hr_data['performance label'] == 'Above Average')]
-    ab_sep_hr_data = sep_hr_data[(sep_hr_data['performance label'] != 'Above Average')]
-    average_corr = ab_sep_hr_data.corr()
-    above_average_corr = aa_sep_hr_data.corr().loc[columns].transpose()
-    below_average_corr = ab_sep_hr_data.corr().loc[columns].transpose()
-    # above_average_corr
-
-    left_data = sep_hr_data[sep_hr_data.left == 1]
-    total_count=sep_hr_data.dept.value_counts()
-    print (total_count)
-
-    percent_left = (left_data.dept.value_counts() / sep_hr_data.dept.value_counts() * 100, 2)
-    # print('Percentage of employees that left by department \n\n', percent_left.sort_values(ascending = False))
-
-    return "success"
+    left_data = hr_data[hr_data.left == 1]
+    left = left_data.groupby('dept').size()
+    total = hr_data.groupby('dept').size()
+    #Result JSON Decleration
+    depts = []
+    result = {}
+    #Result JSON Generation
+    for i in left.keys():
+        count = []
+        count.append(int(str(left[i])))
+        result[i] = count
+    for i in total.keys():
+        count = []
+        count = result[i]
+        count.append(int(str(total[i])))
+        result[i] = count
+    return json.dumps(result)
 
 @app.route('/predict', methods=['POST'])
 def predict():
