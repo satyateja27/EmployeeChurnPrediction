@@ -109,6 +109,36 @@ def getEmpByDept():
     bad_match_list = get_num(bad_match, np.unique(left.sales), 'sales')
 
     return json.dumps(output)
+@app.route('/getSalaryStats',methods=['GET'])
+def getSalaryStats():
+    import numpy as np
+    import pandas as pd
+    import json
+    df = pd.read_csv("HR_comma_sep.csv")
+    current = df[df.left == 0]
+    left = df[df.left == 1]
+    currentStats = pd.crosstab([current.sales], current.salary)
+    leftStats = pd.crosstab([left.sales], left.salary)
+    currentMap = {}
+    rightMap = json.loads(currentStats.to_json())
+    currentMap[0] = rightMap
+    leftMap = json.loads(leftStats.to_json())
+    currentMap[1] = leftMap
+    return (json.dumps(currentMap))
+@app.route('/getPromotionStats',methods=['GET'])
+def getPromotionStats():
+    import numpy as np
+    import pandas as pd
+    import json
+
+    df = pd.read_csv("HR_comma_sep.csv")
+    based_onpromotion = df.groupby('sales')[['promotion_last_5years']].count()
+    promotion = json.loads(based_onpromotion.reset_index().to_json(orient='records'))
+    output = {}
+    for key in promotion:
+        output[key['sales']] = key['promotion_last_5years']
+    return json.dumps(output)
+
 @app.route('/getDeptTrends', methods=['GET'])
 def getDeptTrends():
     #Libraries
