@@ -17,7 +17,7 @@ forest.fit(train.drop(['left','salary','sales'],1),train['left'])
 train=train.apply(lambda x:set_threshold(x),1)
 train.drop('satisfy_new',1,inplace=True)
 train['number_project'].value_counts()
-result = pd.crosstab(train['number_project'],train['left'],)
+result = pd.crosstab(train['time_spend_company'],train['left'])
 print result.to_json()
 
 
