@@ -9,8 +9,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
 	@GetMapping("/")
-	public String home(HttpServletRequest request){
+	public String getLogin(HttpServletRequest request){
 		return "LogIn";
 	}
 	
+	@GetMapping("/signup")
+	public String getSignUp(HttpServletRequest request){
+		return "SignUp";
+	}
+	
+	@GetMapping("/dashboard")
+	public String getDashboard(HttpServletRequest request){
+		return "AdminDashboard";
+	}
 }

@@ -14,10 +14,10 @@
     <title>ChurnPrediction | Login</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
 <body>
 		<div>
@@ -29,7 +29,8 @@
 		<div class="col-sm-4" style="text-align:center"></div>
 		<div class="col-sm-4" style="text-align:center">
 		<p>${message}</p>
-		<h3>Log in to fing Employee Churn Analysis</h3><br>
+		<br/><br/>
+		<h3>Log in to find Employee Churn Analysis</h3><br/><br/>
 		<form method="post" action="/api/user/login">
 		<div class="input-group">
 			<span class="input-group-addon" id="basic-addon1">
@@ -51,9 +52,8 @@
 		<br>
 		<div><input type="submit" class="btn btn-primary" value="Login" /></div>
 		</form>
-		<br>
+		<br/>
 		<div><p>Don't have an account?  <a href="/signup">Signup here</a></p></div>
-		</div>
-	
+		</div>	
 </body>
 </html>
