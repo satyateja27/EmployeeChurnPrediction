@@ -11,7 +11,7 @@
     <meta http-equiv="Cache-Control" content="no-cache"> 
     <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
     
-    <title>MSCIaaS | User</title>
+    <title>ChurnPrediction | User</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

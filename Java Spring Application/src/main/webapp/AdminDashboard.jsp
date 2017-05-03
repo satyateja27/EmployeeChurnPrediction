@@ -11,7 +11,7 @@
     <meta http-equiv="Cache-Control" content="no-cache"> 
     <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
     
-    <title>MSCIaaS | User</title>
+    <title>ChurnPrediction | User</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -40,7 +40,7 @@
 	  
 </head>
 <body>
-	<div ng-app="myApp" ng-controller="myCtrl" ng-init="stop=false; terminate=false">
+	<div ng-app="">
 	<div class = "panel panel-default">
             <div class = "panel-body bg-primary" style=" height:65px">
                <nav class="navbar navbar-light">
@@ -75,20 +75,96 @@
          	<div class="col-sm-1"></div>
          	<div class="col-sm-10">
          		<h1>Admin Dashboard</h1><br/><br/>
-         		
-         		
+         		<div id="div1" ng-controller="promotion"></div>
+         		<div id="div2" ng-controller="departmentTrends"></div>
          	</div>
          	<div class="col-sm-1"></div>
          </div>
 	</div>
 	<script>
-		var app = angular.module('myApp',[]);
-		app.controller('myCtrl',function($scope, $http){
-			$scope.active = function(input){
-				console.log(input);
-				return false;
-			};
-		});
+	function promotion($scope,$http) {
+		var output;
+	    $http({
+			url:"http://localhost:80/getPromotionStats",
+			dataType: "json",
+			data: '',
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
+			}}).then( function(response) 
+			{
+	               $scope.promotionStats = response.data;
+				   console.log($scope.promotionStats)
+				   var xData = []
+				   var yData = []
+				   for( var i in $scope.promotionStats){
+						xData.push(i)
+						yData.push($scope.promotionStats[i])
+					}
+					console.log(yData)
+					console.log(xData)
+					var data = [{
+						values: yData,
+						labels: xData,
+						type: 'pie'
+					}];
+
+					var layout = {
+						title: 'Promotions per Department',
+						height: 450,
+						width: 550
+					};
+
+					Plotly.newPlot('div1', data, layout);
+	         });
+		}
+		function departmentTrends($scope,$http) {
+		var output;
+	    $http({
+			url:"http://localhost:80/getDeptTrends",
+			dataType: "json",
+			data: '',
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
+			}}).then( function(response) 
+			{
+	               $scope.departmentData = response.data;
+				   console.log($scope.departmentData)
+				   var xData = []
+				   var y1Data = []
+				   var y2Data = []
+				   for( var i in $scope.departmentData){
+						xData.push(i)
+						y2Data.push($scope.departmentData[i][0])
+						y1Data.push($scope.departmentData[i][1]-$scope.departmentData[i][0])
+					}
+					var trace1 = {
+					x: xData,
+					y: y1Data,
+					name: 'Current Employees',
+					type: 'bar'
+					};
+
+					var trace2 = {
+					x: xData,
+					y: y2Data,
+					name: 'Left Employees',
+					type: 'bar'
+					};
+
+					var data = [trace1, trace2];
+
+					var layout = {
+					title: 'Employees Count Statistics per Department',
+					height: 450,
+					width:  600,
+					barmode: 'stack'
+					};
+
+					Plotly.newPlot('div2', data, layout);
+	         });
+		}
 	</script>
 </body>
 </html>
