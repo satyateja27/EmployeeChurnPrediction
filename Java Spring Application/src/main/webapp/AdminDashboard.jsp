@@ -18,6 +18,7 @@
 	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
 	  
 	  <style>
 		table {
@@ -40,7 +41,7 @@
 	  
 </head>
 <body>
-	<div ng-app="">
+	<div ng-app="myApp" ng-controller="myCtrl">
 	<div class = "panel panel-default">
             <div class = "panel-body bg-primary" style=" height:65px">
                <nav class="navbar navbar-light">
@@ -75,22 +76,24 @@
          	<div class="col-sm-1"></div>
          	<div class="col-sm-10">
          		<h1>Admin Dashboard</h1><br/><br/>
-         		<div id="div1" ng-controller="promotion"></div>
-         		<div id="div2" ng-controller="departmentTrends"></div>
+         		<div id="div1" ng-init="promotion()"></div>
+         		<div id="div2" ng-init="departmentTrends()"></div>
          	</div>
          	<div class="col-sm-1"></div>
          </div>
-	</div>
+	
 	<script>
-	function promotion($scope,$http) {
-		var output;
-	    $http({
-			url:"http://localhost:80/getPromotionStats",
-			dataType: "json",
-			data: '',
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json"
+	var app = angular.module('myApp',[]);
+    app.controller('myCtrl', function($scope, $http){
+    	$scope.promotion = function(){
+    		var output;
+	    	$http({
+				url:"http://localhost:80/getPromotionStats",
+				dataType: "json",
+				data: '',
+				method: "GET",
+				headers: {
+							"Content-Type": "application/json"
 			}}).then( function(response) 
 			{
 	               $scope.promotionStats = response.data;
@@ -117,9 +120,10 @@
 
 					Plotly.newPlot('div1', data, layout);
 	         });
-		}
-		function departmentTrends($scope,$http) {
-		var output;
+    	}
+
+    	$scope.departmentTrends = function(){
+    		var output;
 	    $http({
 			url:"http://localhost:80/getDeptTrends",
 			dataType: "json",
@@ -164,7 +168,10 @@
 
 					Plotly.newPlot('div2', data, layout);
 	         });
-		}
+    	}
+        
+    });
 	</script>
+	</div>
 </body>
 </html>
