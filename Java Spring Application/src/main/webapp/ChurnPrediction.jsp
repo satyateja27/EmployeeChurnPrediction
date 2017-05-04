@@ -91,13 +91,13 @@
          </div>
 	</div>
 	<script>
-	var app = angular.module('myApp',['ngStorage']);
+	var app = angular.module('myApp',[]);
  	app.controller('myCtrl', function($scope, $http, $window){
  		
  		$scope.searchEmployee = function(){
  			$http({
  				method:"GET",
- 				url:'/api/getEmployee',
+ 				url:'/api/getEmployee/' + $scope.searchContent,
  				params: {id : $scope.searchContent},
  	            headers : {'Content-Type': 'application/json'}
  			}).success(function(response){

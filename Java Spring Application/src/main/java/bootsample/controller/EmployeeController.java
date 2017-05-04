@@ -25,7 +25,7 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 	
-	@GetMapping("/api/user/{userId}")
+	@GetMapping("/api/getEmployee/{userId}")
 	public ModelAndView login(@PathVariable(value="userId") int userId) throws IOException
 	{
 		ModelMap model = new ModelMap();
