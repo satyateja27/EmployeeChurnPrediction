@@ -111,17 +111,14 @@
 						labels: xData,
 						type: 'pie'
 					}];
-
 					var layout = {
 						title: 'Promotions per Department',
 						height: 450,
 						width: 550
 					};
-
 					Plotly.newPlot('div1', data, layout);
 	         });
     	}
-
     	$scope.departmentTrends = function(){
     		var output;
 	    $http({
@@ -149,23 +146,19 @@
 					name: 'Current Employees',
 					type: 'bar'
 					};
-
 					var trace2 = {
 					x: xData,
 					y: y2Data,
 					name: 'Left Employees',
 					type: 'bar'
 					};
-
 					var data = [trace1, trace2];
-
 					var layout = {
 					title: 'Employees Count Statistics per Department',
 					height: 450,
 					width:  600,
 					barmode: 'stack'
 					};
-
 					Plotly.newPlot('div2', data, layout);
 	         });
     	}
