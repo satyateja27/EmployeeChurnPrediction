@@ -74,6 +74,7 @@
          	<div class="col-sm-10">
          		<div class="panel-body" style="text-align:center">
 				<h1>Profile</h1><br/><br/>
+				<img src="/image.jpg" style="width:200px; heigth:300px"> <br/><br/>
 				<h4><span class="glyphicon glyphicon-user"></span> First Name: ${user.getFirstName()}</h4>
 				<h4><span class="glyphicon glyphicon-user"></span> Last Name: ${user.getLastName()}</h4>
 				<h4><span class="glyphicon glyphicon-envelope"></span> Email: ${user.getEmail()}</h4>
