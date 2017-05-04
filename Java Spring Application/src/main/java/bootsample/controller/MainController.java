@@ -18,8 +18,4 @@ public class MainController {
 		return "SignUp";
 	}
 	
-	@GetMapping("/dashboard")
-	public String getDashboard(HttpServletRequest request){
-		return "AdminDashboard";
-	}
 }

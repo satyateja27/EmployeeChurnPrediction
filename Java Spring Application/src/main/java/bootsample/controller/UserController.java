@@ -73,6 +73,14 @@ public class UserController {
 		return new ModelAndView("AdminDashboard",model);
 	}
 	
+	@GetMapping("/user/{userId}/churnPrediction")		
+	public ModelAndView getEmployeePrediction(@PathVariable(value="userId") int userId){
+		ModelMap model = new ModelMap();
+		User user = userService.findUserbyId(userId);
+		model.addAttribute("user", user);
+		return new ModelAndView("ChurnPrediction",model);
+	}
+	
 	@GetMapping("/user/{userId}/profile")		
 	public ModelAndView getProfile(@PathVariable(value="userId") int userId){
 		

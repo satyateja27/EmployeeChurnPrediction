@@ -11,7 +11,7 @@
     <meta http-equiv="Cache-Control" content="no-cache"> 
     <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
     
-    <title>ChurnPrediction | User</title>
+    <title>ChurnPrediction | Employee</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -41,7 +41,7 @@
 	  
 </head>
 <body>
-	<div ng-app="myApp" ng-controller="myCtrl">
+	<div ng-app="myApp" ng-controller="myCtrl" ng-init="hide=true">
 	<div class = "panel panel-default">
             <div class = "panel-body bg-primary" style=" height:65px">
                <nav class="navbar navbar-light">
@@ -75,96 +75,54 @@
          <div>
          	<div class="col-sm-1"></div>
          	<div class="col-sm-10">
-         		<h1>Admin Dashboard</h1><br/><br/>
-         		<div id="div1" ng-init="promotion()"></div>
-         		<div id="div2" ng-init="departmentTrends()"></div>
+         		<h3>Enter the employee id to get the churn prediction</h3><br/><br/>
+         		<div class="row">
+         			<div class="col-lg-2">Enter the employee ID: </div>	
+         			<div class="col-lg-4"><input type="text" ng-model="searchContent" class="form-control"/></div>
+         			<div class="col-lg-2"><button class="btn btn-primary" ng-click="searchEmployee()">Search Employee</button></div>
+         		</div><br/>
+         		<div class="row" ng-hide="hide">
+         		
+         			<div class="row"><button class="btn btn-primary" ng-click="getPrediction()">Get Prediction</button></div>
+         		</div>
+         		<div class="row" ng-hide="prediction">The Employee will <div ng-model="decision" style="color:red"></div></div>
          	</div>
          	<div class="col-sm-1"></div>
          </div>
-	
-	<script>
-	var app = angular.module('myApp',[]);
-    app.controller('myCtrl', function($scope, $http){
-    	$scope.promotion = function(){
-    		var output;
-	    	$http({
-				url:"http://localhost:80/getPromotionStats",
-				dataType: "json",
-				data: '',
-				method: "GET",
-				headers: {
-							"Content-Type": "application/json"
-			}}).then( function(response) 
-			{
-	               $scope.promotionStats = response.data;
-				   console.log($scope.promotionStats)
-				   var xData = []
-				   var yData = []
-				   for( var i in $scope.promotionStats){
-						xData.push(i)
-						yData.push($scope.promotionStats[i])
-					}
-					console.log(yData)
-					console.log(xData)
-					var data = [{
-						values: yData,
-						labels: xData,
-						type: 'pie'
-					}];
-					var layout = {
-						title: 'Promotions per Department',
-						height: 450,
-						width: 550
-					};
-					Plotly.newPlot('div1', data, layout);
-	         });
-    	}
-    	$scope.departmentTrends = function(){
-    		var output;
-	    $http({
-			url:"http://localhost:80/getDeptTrends",
-			dataType: "json",
-			data: '',
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json"
-			}}).then( function(response) 
-			{
-	               $scope.departmentData = response.data;
-				   console.log($scope.departmentData)
-				   var xData = []
-				   var y1Data = []
-				   var y2Data = []
-				   for( var i in $scope.departmentData){
-						xData.push(i)
-						y2Data.push($scope.departmentData[i][0])
-						y1Data.push($scope.departmentData[i][1]-$scope.departmentData[i][0])
-					}
-					var trace1 = {
-					x: xData,
-					y: y1Data,
-					name: 'Current Employees',
-					type: 'bar'
-					};
-					var trace2 = {
-					x: xData,
-					y: y2Data,
-					name: 'Left Employees',
-					type: 'bar'
-					};
-					var data = [trace1, trace2];
-					var layout = {
-					title: 'Employees Count Statistics per Department',
-					height: 450,
-					width:  600,
-					barmode: 'stack'
-					};
-					Plotly.newPlot('div2', data, layout);
-	         });
-    	}
-        
-    });
-	</script>
 	</div>
+	<script>
+	var app = angular.module('myApp',['ngStorage']);
+ 	app.controller('myCtrl', function($scope, $http, $window){
+ 		
+ 		$scope.searchEmployee = function(){
+ 			$http({
+ 				method:"GET",
+ 				url:'/api/getEmployee',
+ 				params: {id : $scope.searchContent},
+ 	            headers : {'Content-Type': 'application/json'}
+ 			}).success(function(response){
+ 				$scope.hide = false;
+ 	
+ 			});
+ 		};
+ 		
+ 		$scope.getPrediction = function(){
+ 			$http({
+ 				method: "GET",
+ 				url: '/api/getPrediction',
+ 				params: {id : $scope.id},
+ 				headers : {'Content-Type' : 'application/json'}
+ 			}).success(function(response){
+ 				$scope.prediction = false;
+ 				if(response.data == 1){
+ 					$scope.decision = "leave";
+ 				}else{
+ 					$scope.decision = "stay";
+ 				}
+ 			});
+ 		}
+ 		
+ 	});
+	</script>
 </body>
 </html>

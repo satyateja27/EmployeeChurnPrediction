@@ -48,7 +48,7 @@
                            <a class="nav-link" href="/user/${user.getUserId()}/dashBoard" style="color:white">Admin Dashboard</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="" style="color:white">Churn Prediction</a>
+                           <a class="nav-link" href="/user/${user.getUserId()}/churnPrediciton" style="color:white">Churn Prediction</a>
                         </li>
                         <li class="nav-item">
                            <a class="nav-link" href="" style="color:white">Churn Recommendation</a>
