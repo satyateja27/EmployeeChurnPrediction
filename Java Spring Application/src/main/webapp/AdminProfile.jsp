@@ -11,7 +11,7 @@
     <meta http-equiv="Cache-Control" content="no-cache"> 
     <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
     
-    <title>ChurnPrediction | User</title>
+    <title>ChurnPrediction | Profile</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -48,13 +48,13 @@
                            <a class="nav-link" href="/user/${user.getUserId()}/dashBoard" style="color:white">Admin Dashboard</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUserId()}/churnPrediciton" style="color:white">Churn Prediction</a>
+                           <a class="nav-link" href="/user/${user.getUserId()}/churnPrediction" style="color:white">Churn Prediction</a>
                         </li>
                         <li class="nav-item">
                            <a class="nav-link" href="" style="color:white">Churn Recommendation</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUserId()}/profile" style="color:white">User Profile</a>
+                           <a class="nav-link" href="/user/${user.getUserId()}/profile" style="color:white">Admin Profile</a>
                         </li>
                      </ul>
                      <ul class="nav navbar-nav navbar-right">

@@ -11,7 +11,7 @@
     <meta http-equiv="Cache-Control" content="no-cache"> 
     <meta http-equiv="Expires" content="Sat, 01 Dec 2001 00:00:00 GMT">
     
-    <title>ChurnPrediction | User</title>
+    <title>ChurnPrediction | Dashboard</title>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -51,13 +51,13 @@
                            <a class="nav-link" href="/user/${user.getUserId()}/dashBoard" style="color:white">Admin Dashboard</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUserId()}/churnPrediciton" style="color:white">Churn Prediction</a>
+                           <a class="nav-link" href="/user/${user.getUserId()}/churnPrediction" style="color:white">Churn Prediction</a>
                         </li>
                         <li class="nav-item">
                            <a class="nav-link" href="" style="color:white">Churn Recommendation</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="/user/${user.getUserId()}/profile" style="color:white">User Profile</a>
+                           <a class="nav-link" href="/user/${user.getUserId()}/profile" style="color:white">Admin Profile</a>
                         </li>
                      </ul>
                      <ul class="nav navbar-nav navbar-right">
@@ -72,9 +72,8 @@
                </nav>
             </div>
          </div>
-         <div>
-         	<div class="col-sm-1"></div>
-         	<h1>Admin Dashboard</h1><br/><br/>
+         <div class="row" style="text-align:center"><h1>Admin Dashboard</h1><br/></div>
+         <div class="row">
          	<div class="col-sm-5">
          		<div id="div1" ng-init="promotion()"></div>
          		<div id="div2" ng-init="departmentTrends()"></div>
@@ -89,10 +88,8 @@
          		<div id="div8" ng-init="leftEmployeeSalary()"></div>
          		<div id="div9" ng-init="getProjectStats()"></div>
          		<div id="div10" ng-init="getTimeSpendStats()"></div>
-         		<br>
-         		<br>
          	</div>
-         	
+         	<div class="col-sm-1"></div>
          </div>
 	
 	<script>
@@ -101,7 +98,7 @@
     	$scope.getTimeSpendStats = function(){
     		var output;
     	    $http({
-    			url:"http://localhost:80/getTimeSpendCompany",
+    			url:"http://52.53.150.216:80/getTimeSpendCompany",
     			dataType: "json",
     			data: '',
     			method: "GET",
@@ -154,7 +151,7 @@
     	$scope.getProjectStats = function(){
     		var output;
     	    $http({
-    			url:"http://localhost:80/getProjectStats",
+    			url:"http://52.53.150.216:80/getProjectStats",
     			dataType: "json",
     			data: '',
     			method: "GET",
@@ -207,7 +204,7 @@
     	$scope.leftEmployeeSalary = function(){
     		var output;
     	    $http({
-    			url:"http://localhost:80/getSalaryStats",
+    			url:"http://52.53.150.216:80/getSalaryStats",
     			dataType: "json",
     			data: '',
     			method: "GET",
@@ -271,7 +268,7 @@
     	$scope.stayingEmployeeSalary = function(){
     		var output;
     	    $http({
-    			url:"http://localhost:80/getSalaryStats",
+    			url:"http://52.53.150.216:80/getSalaryStats",
     			dataType: "json",
     			data: '',
     			method: "GET",
@@ -336,7 +333,7 @@
     	$scope.employeeLeftDepartmentStats = function(){
     		var output;
     	    $http({
-    			url:"http://localhost:80/getEmpByDept",
+    			url:"http://52.53.150.216:80/getEmpByDept",
     			dataType: "json",
     			data: '',
     			method: "GET",
@@ -395,7 +392,7 @@
     	
     	var output;
 	    $http({
-			url:"http://localhost:80/getMeanData",
+			url:"http://52.53.150.216:80/getMeanData",
 			dataType: "json",
 			data: '',
 			method: "GET",
@@ -446,7 +443,7 @@
     	$scope.goodEmployeeChurn = function(){
     		var output;
 	    	$http({
-				url:"http://localhost:80/getGoodEmployeeChurn",
+				url:"http://52.53.150.216:80/getGoodEmployeeChurn",
 				dataType: "json",
 				data: '',
 				method: "GET",
@@ -482,7 +479,7 @@
     	$scope.promotion = function(){
     		var output;
 	    	$http({
-				url:"http://localhost:80/getPromotionStats",
+				url:"http://52.53.150.216:80/getPromotionStats",
 				dataType: "json",
 				data: '',
 				method: "GET",
@@ -516,7 +513,7 @@
     	$scope.featureTrends = function(){
     		var output;
 	    	$http({
-				url:"http://localhost:80/getFeatureImportance",
+				url:"http://52.53.150.216:80/getFeatureImportance",
 				dataType: "json",
 				data: '',
 				method: "GET",
@@ -551,7 +548,7 @@
     	$scope.promotion = function(){
     		var output;
 	    	$http({
-				url:"http://localhost:80/getPromotionStats",
+				url:"http://52.53.150.216:80/getPromotionStats",
 				dataType: "json",
 				data: '',
 				method: "GET",
@@ -585,7 +582,7 @@
     	$scope.departmentTrends = function(){
     		var output;
 	    $http({
-			url:"http://localhost:80/getDeptTrends",
+			url:"http://52.53.150.216:80/getDeptTrends",
 			dataType: "json",
 			data: '',
 			method: "GET",

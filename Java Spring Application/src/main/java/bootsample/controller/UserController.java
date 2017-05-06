@@ -67,26 +67,19 @@ public class UserController {
 	
 	@GetMapping("/user/{userId}/dashBoard")		
 	public ModelAndView getDashBoard(@PathVariable(value="userId") int userId){
-		System.out.println("Start fetching dashboard");
 		ModelMap model = new ModelMap();
 		User user = userService.findUserbyId(userId);
 		model.addAttribute("user", user);
 		return new ModelAndView("AdminDashboard",model);
 	}
 	
-	@GetMapping("/churnPrediction")
-	public ModelAndView testing(){
-		return new ModelAndView("ChurnPrediction");
+	@GetMapping("/user/{userId}/churnPrediction")		
+	public ModelAndView getEmployeePrediction(@PathVariable(value="userId") int userId){
+		ModelMap model = new ModelMap();
+		User user = userService.findUserbyId(userId);
+		model.addAttribute("user", user);
+		return new ModelAndView("ChurnPrediction",model);
 	}
-	
-//	@GetMapping("/user/{userId}/churnPrediction")		
-//	public ModelAndView getEmployeePrediction(@PathVariable(value="userId") int userId){
-//		System.out.println("Start Churn Prediction");
-//		ModelMap model = new ModelMap();
-//		User user = userService.findUserbyId(userId);
-//		model.addAttribute("user", user);
-//		return new ModelAndView("ChurnPrediction",model);
-//	}
 	
 	@GetMapping("/user/{userId}/profile")		
 	public ModelAndView getProfile(@PathVariable(value="userId") int userId){
