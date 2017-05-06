@@ -75,24 +75,131 @@
          <div>
          	<div class="col-sm-1"></div>
          	<div class="col-sm-10">
-         		<h3>Enter the employee id to get the churn prediction</h3><br/><br/>
+         		<div><h3><b>Prediction Module</b></h3></div><br/><br/>
          		<div class="row">
          			<div class="col-lg-2">Enter the employee ID: </div>	
-         			<div class="col-lg-4"><input type="text" ng-model="searchContent" class="form-control"/></div>
+         			<div class="col-lg-2"><input type="text" ng-model="searchContent" class="form-control"/></div>
          			<div class="col-lg-2"><button class="btn btn-primary" ng-click="searchEmployee()">Search Employee</button></div>
          		</div><br/>
          		<div class="row" ng-hide="hide">
-         		
-         			<div class="row"><button class="btn btn-primary" ng-click="getPrediction()">Get Prediction</button></div>
+					<div class="panel panel-default col-lg-6">
+					  <div class="panel-heading"><b>Employee Summary</b></div>
+					  <div class="panel-body">
+					    <p><h3>{{employee.first_name}} {{employee.first_name}}</h3></p>
+					  </div>
+					  <ul class="list-group">
+					    <li class="list-group-item"><b> Date of Birth: </b>{{employee.dob}}</li>
+					    <li class="list-group-item"><b>Department: </b>{{employee.department}}</li>
+					    <li class="list-group-item"><b>Satisfaction Level: </b>{{employee.satisfaction_level}}</li>
+					    <li class="list-group-item"><b>Number of Projects: </b>{{employee.number_projects}}</li>
+					    <li class="list-group-item"><b>Avg.Monthly Hours:</b>{{employee.average_montly_hours}}</li>
+					    <li class="list-group-item"><b>Time Spend(Yrs): </b>{{employee.time_spend_company}}</li>
+					  </ul>
+					</div>
+					<div class="row col-lg-1"></div>
+         			<div class="row col-lg-2"><button class="btn btn-primary" ng-click="getPrediction()">Get Prediction</button></div>
          		</div>
-         		<div class="row" ng-hide="prediction">The Employee will <div ng-model="decision" style="color:red"></div></div>
+         		<div ng-hide="prediction">
+         		<div class="row" ng-hide="prediction1">
+         			<div ng-model="decision" style="color:green"><b>Prediction: {{employee.first_name}} will stay at the Company for next 6 Months
+         			</div>
+         			<br>
+         			<br>
+         		</div>
+         		<div class="row" ng-hide="prediction2">
+         			<div ng-model="decision" style="color:red"><b>Prediction: {{employee.first_name}} will leave the Company in next 6 Months</b>
+         			</div>
+         			<div><h3><b>Simulation Module</b></h3></div>
+         			<br>
+         			<br>
+         			<div class="row col-lg-3">
+         				<label for="fader">Number of Projects</label>
+						<input type="range" min="1" max="9" value="{{employee.number_projects}}" id="fader" step="1" oninput="outputUpdate1(value)">
+						<output for="fader" id="projects">{{employee.number_projects}}</output>
+						<label for="fader">Salary</label>
+						<input type="range" min="0" max="2" value="{{employee.salary}}" id="fader" step="1" oninput="outputUpdate2(value)">
+						<output for="fader" id="salary">{{employee.salary}}</output>
+						<label for="fader">Promotion</label>
+						<input type="range" min="0" max="1" value="0" id="fader" step="1" oninput="outputUpdate3(value)">
+						<output for="fader" id="promotion">{{employee.promotion}}</output>
+						<br>
+						<br>
+					</div>
+					<div class="row col-lg-1"></div>
+					<div class="row col-lg-2"><button class="btn btn-primary" ng-click="performSimulation()">Simulate</button></div>
+         			<br>
+         			<br>
+         		</div>
+         		<div><b>{{simulateOutput}}</b></div>
+         		<br>
+         		<br>
+         		<br>
+         		<br>
+         		</div>
          	</div>
          	<div class="col-sm-1"></div>
          </div>
 	</div>
 	<script>
+	var employeeData;
+	var simulateProject;
+	var simulateSalary;
+	var simulatePromotion;
+	
+	function outputUpdate1(vol) {
+			document.querySelector('#projects').value = vol;
+			simulateProject = vol;
+		}
+		function outputUpdate2(vol) {
+			document.querySelector('#salary').value = vol;
+			simulateSalary = vol;
+		}
+		function outputUpdate3(vol) {
+			document.querySelector('#promotion').value = vol;
+			simulatePromotion = vol+employeeData.promotion;
+		}				
 	var app = angular.module('myApp',[]);
  	app.controller('myCtrl', function($scope, $http, $window){
+ 		var dept = {'sales':0, 'accounting':1, 'hr':2, 'technical':3, 'support':4, 'management':5,
+                'IT':6, 'product_mng':7, 'marketing':8, 'RandD':9};
+ 		var salaryMapping = {'low':0,'medium':1,'high':2};
+ 		$scope.prediction = true;
+ 		$scope.prediction1 = true;
+ 		$scope.prediction2= true;
+ 		
+ 		$scope.performSimulation = function(){
+ 			console.log('Vimal');
+ 			console.log(simulateProject);
+ 			console.log(simulateSalary);
+ 			console.log(simulatePromotion);
+ 			var a = employeeData.department;
+ 			var dep = dept[a];
+ 			$http({
+ 				method: "POST",
+ 				url: 'http://localhost:80/predict',
+ 				data: {
+ 					satisfaction_level:employeeData.satisfaction_level,	
+ 					last_evaluation:employeeData.last_evaluation,
+ 					number_project:simulateProject,
+ 					average_montly_hours:employeeData.average_montly_hours,
+ 					time_spend_company:employeeData.time_spend_company,
+ 					Work_accident:employeeData.work_accident,
+ 					promotion_last_5years:simulatePromotion,
+ 					sales:dep,
+ 					salary:simulateSalary
+ 					},
+ 				headers : {'Content-Type' : 'application/json'}
+ 			}).success(function(response){
+ 				$scope.result = response.prediction;
+ 				if($scope.result==0){
+ 					$scope.simulateOutput = "Employee will Stay";
+ 				}else{
+ 					$scope.simulateOutput = "Employee will Leave";
+ 				} 				
+ 			});
+ 			
+ 			
+ 		};
  		
  		$scope.searchEmployee = function(){
  			$http({
@@ -101,24 +208,49 @@
  				params: {id : $scope.searchContent},
  	            headers : {'Content-Type': 'application/json'}
  			}).success(function(response){
+ 				$scope.employee = response.Employee;
+ 				employeeData = $scope.employee
+ 				
+ 				simulateProject = employeeData.number_projects;
+ 				var b = employeeData.salary;
+ 	 			var sal = salaryMapping[b]; 				
+ 				simulateSalary = sal;
+ 				simulatePromotion = employeeData.promotion
  				$scope.hide = false;
  	
  			});
  		};
  		
  		$scope.getPrediction = function(){
+ 			console.log(employeeData);
+ 			var a = employeeData.department;
+ 			var dep = dept[a];
+ 			var b = employeeData.salary;
+ 			var sal = salaryMapping[b];
+ 			
  			$http({
- 				method: "GET",
- 				url: '/api/getPrediction',
- 				params: {id : $scope.id},
+ 				method: "POST",
+ 				url: 'http://localhost:80/predict',
+ 				data: {
+ 					satisfaction_level:employeeData.satisfaction_level,	
+ 					last_evaluation:employeeData.last_evaluation,
+ 					number_project:employeeData.number_projects,
+ 					average_montly_hours:employeeData.average_montly_hours,
+ 					time_spend_company:employeeData.time_spend_company,
+ 					Work_accident:employeeData.work_accident,
+ 					promotion_last_5years:employeeData.promotion,
+ 					sales:dep,
+ 					salary:sal
+ 					},
  				headers : {'Content-Type' : 'application/json'}
  			}).success(function(response){
+ 				$scope.result = response.prediction;
  				$scope.prediction = false;
- 				if(response.data == 1){
- 					$scope.decision = "leave";
+ 				if($scope.result==0){
+ 					$scope.prediction1 = false;
  				}else{
- 					$scope.decision = "stay";
- 				}
+ 					$scope.prediction2 = false;
+ 				} 				
  			});
  		}
  		

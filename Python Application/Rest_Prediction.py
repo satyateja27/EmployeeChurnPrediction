@@ -27,6 +27,140 @@ model_columns = None
 clf = None
 
 
+@app.route('/getFeatureImportance',methods=['GET'])
+def getFeatureImportance():
+    import numpy as np
+    import pandas as pd
+    from sklearn.preprocessing import MinMaxScaler, LabelEncoder
+    from sklearn.model_selection import train_test_split, StratifiedKFold
+    from sklearn.tree import DecisionTreeClassifier
+    import json
+
+    def rank_satisfaction(employee):
+        level = "unknown"
+        if employee.satisfaction_level < 0.45:
+            level = 'low'
+        elif employee.satisfaction_level < 0.75:
+            level = 'medium'
+        else:
+            level = 'high'
+        return level
+
+    hr_df = pd.read_csv('HR_comma_sep.csv')
+    hr_df['satisfaction'] = hr_df.apply(rank_satisfaction, axis=1)
+    y = hr_df.satisfaction.copy()
+    X = hr_df.copy()
+    X = X.drop(["left", "satisfaction_level", "satisfaction"], axis=1)
+
+    le_sales = LabelEncoder()
+    le_salary = LabelEncoder()
+    le_satisfaction = LabelEncoder()
+    le_sales.fit(X.sales)
+    le_salary.fit(X.salary)
+    le_satisfaction.fit(y)
+    X.sales = le_sales.transform(X.sales)
+    X.salary = le_salary.transform(X.salary)
+    y = le_salary.transform(y)
+    y = np.float32(y)
+    min_max_scaler = MinMaxScaler()
+    X = min_max_scaler.fit_transform(X)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    happiness_decision_tree = DecisionTreeClassifier()
+
+    # Stratify split and train on 5 folds
+    skf = StratifiedKFold(n_splits=5)
+    counter = 1
+    for train_fold, test_fold in skf.split(X_train, y_train):
+        happiness_decision_tree.fit(X_train[train_fold], y_train[train_fold])
+        print(str(counter) + ": ", happiness_decision_tree.score(X_train[test_fold], y_train[test_fold]))
+        counter += 1
+        features_order = ['last_evaluation', 'number_project', 'average_montly_hours',
+                          'time_spend_company', 'Work_accident', 'promotion_last_5years', 'sales', 'salary']
+    output = {key: val for key, val in zip(features_order, happiness_decision_tree.feature_importances_)}
+    return Response(json.dumps(output), mimetype='application/json')
+
+
+@app.route('/getGoodEmployeeChurn',methods=['GET'])
+def getGoodEmployeeChurn():
+    import mysql.connector as sql
+    import pandas as pd
+    import numpy as np
+    import json
+
+    db_connection = sql.connect(host='hranalytics.czcxvxuswvxe.us-west-1.rds.amazonaws.com',
+                                database='EmployeeChurnPrediction', user='root', password='root')
+    df = pd.read_sql('SELECT * FROM employee', con=db_connection)
+
+    def run_cv(X, y, clf_class, method, **kwargs):
+        from sklearn.model_selection import cross_val_predict
+
+        # Initialize a classifier with key word arguments
+        clf = clf_class(**kwargs)
+
+        predicted = cross_val_predict(clf, X, y, cv=3, method=method)
+
+        return predicted
+
+    leave_df = pd.read_csv('HR_comma_sep.csv')
+    col_names = leave_df.columns.tolist()
+    print("Column names:")
+    print (col_names)
+
+    y = leave_df['left']
+    to_drop = ['salary', 'left']
+    leave_feat_space = leave_df.drop(to_drop, axis=1)
+    features = leave_feat_space.columns
+    from sklearn import preprocessing
+    le_sales = preprocessing.LabelEncoder()
+    le_sales.fit(leave_feat_space["sales"])
+    leave_feat_space["sales"] = le_sales.transform(leave_feat_space.loc[:, ('sales')])
+    X = leave_feat_space.as_matrix().astype(np.float)
+    scaler = preprocessing.StandardScaler()
+    X = scaler.fit_transform(X)
+    from sklearn.svm import SVC
+    from sklearn.ensemble import RandomForestClassifier as RF
+    from sklearn.neighbors import KNeighborsClassifier as KNN
+    from sklearn import metrics
+
+    def accuracy(y, predicted):
+        # NumPy interprets True and False as 1. and 0.
+        return metrics.accuracy_score(y, predicted)
+
+    from sklearn.metrics import confusion_matrix
+    y = np.array(y)
+    class_names = np.unique(y)
+    confusion_matrices = [
+        ("Support Vector Machines", confusion_matrix(y, run_cv(X, y, SVC, method='predict'))),
+        ("Random Forest", confusion_matrix(y, run_cv(X, y, RF, method='predict'))),
+        ("K-Nearest-Neighbors", confusion_matrix(y, run_cv(X, y, KNN, method='predict'))),
+    ]
+
+    pred_prob = run_cv(X, y, RF, n_estimators=10, method='predict_proba', )
+
+    pred_leave = pred_prob[:, 1]
+    is_leave = y == 1
+
+    counts = pd.value_counts(pred_leave)
+    true_prob = {}
+    for prob in counts.index:
+        true_prob[prob] = np.mean(is_leave[pred_leave == prob])
+        true_prob = pd.Series(true_prob)
+
+    counts = pd.concat([counts, true_prob], axis=1).reset_index()
+    counts.columns = ['pred_prob', 'count', 'true_prob']
+    pred_prob_df = pd.DataFrame(pred_prob)
+    pred_prob_df.columns = ['prob_not_leaving', 'prob_leaving']
+    all_employees_pred_prob_df = pd.concat([df, pred_prob_df], axis=1)
+    good_employees_still_working_df = all_employees_pred_prob_df[(all_employees_pred_prob_df["last_evaluation"] >= 0.7)]
+    good_employees_still_working_df.sort_values(by='prob_leaving', ascending=False, inplace=True)
+    result = good_employees_still_working_df.head(100).groupby('department').size()
+
+    output = {}
+
+    for i in result.keys():
+        output[i] = int(str(result[i]))
+    return Response(json.dumps(output), mimetype='application/json')
+
 @app.route('/getMeanData',methods=['GET'])
 def getMeanData():
     import numpy as np
@@ -156,7 +290,7 @@ def getSalaryStats():
     currentMap[0] = rightMap
     leftMap = json.loads(leftStats.to_json())
     currentMap[1] = leftMap
-    return (json.dumps(currentMap))
+    return Response(json.dumps(currentMap), mimetype='application/json')
 @app.route('/getPromotionStats',methods=['GET'])
 def getPromotionStats():
     import numpy as np

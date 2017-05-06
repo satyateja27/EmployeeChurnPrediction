@@ -74,7 +74,7 @@ public class UserController {
 		return new ModelAndView("AdminDashboard",model);
 	}
 	
-	@GetMapping("/user/{userId}/churnPrediction")
+	@GetMapping("/churnPrediction")
 	public ModelAndView testing(){
 		return new ModelAndView("ChurnPrediction");
 	}
