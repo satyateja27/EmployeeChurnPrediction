@@ -88,7 +88,7 @@ def getGoodEmployeeChurn():
     import json
 
     db_connection = sql.connect(host='hranalytics.czcxvxuswvxe.us-west-1.rds.amazonaws.com',
-                                database='EmployeeChurnPrediction', user='root', password='root')
+                                database='EmployeeChurnPrediction', user='Sjspartan16', password='Sjspartan16')
     df = pd.read_sql('SELECT * FROM employee', con=db_connection)
 
     def run_cv(X, y, clf_class, method, **kwargs):
