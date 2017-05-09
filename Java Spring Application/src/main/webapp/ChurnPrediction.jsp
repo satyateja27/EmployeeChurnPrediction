@@ -54,9 +54,6 @@
                            <a class="nav-link" href="/user/${user.getUserId()}/churnPrediction" style="color:white">Churn Prediction</a>
                         </li>
                         <li class="nav-item">
-                           <a class="nav-link" href="" style="color:white">Churn Recommendation</a>
-                        </li>
-                        <li class="nav-item">
                            <a class="nav-link" href="/user/${user.getUserId()}/profile" style="color:white">Admin Profile</a>
                         </li>
                      </ul>
